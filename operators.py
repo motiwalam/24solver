@@ -1,5 +1,8 @@
-from operator import add, sub, mul, itruediv, pow, neg
+from operator import add, sub, mul, itruediv, pow as _p, neg
 from math import factorial
+
+def pow(a, b):
+    return float(a) ** b
 
 def div(a, b):
     return itruediv(a, b)
