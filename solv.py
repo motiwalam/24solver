@@ -6,8 +6,8 @@ from functools import reduce
 import operators
 
 foldr = lambda func, xs, initial: reduce(lambda x, y: func(y, x), reversed(xs), initial)
-
 argcount = lambda f: len(signature(f).parameters)
+
 def optable(ops):
     def key(v):
         if isinstance(v, tuple):
