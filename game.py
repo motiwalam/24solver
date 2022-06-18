@@ -75,9 +75,10 @@ class Config:
                "ops:\n    " + '\n    '.join(self.opstrs())
 
 int_parse = lambda args: int(args[0])
+
 COMMANDS = {
     "new-set": Command(
-        ("generate", "gen", ""), 
+        ("generate", "gen", "g", ""), 
         help="generate a random new set of numbers (guaranteed to have solutions)"
     ),
 
@@ -85,12 +86,12 @@ COMMANDS = {
         ("set-ns", "set", "make", "m"),
         args=("<NUMBERS>",),
         help="set the current set to NUMBERS",
-        parse=lambda argv: tuple(int(c) for c in argv)
+        parse=lambda argv: tuple(map(int, argv))
     ),
     
     "solve": Command(
         ("solve", "solutions", "s"),  
-        help="solve the current set or"
+        help="solve the current set"
     ),
 
     "set-number": Command(
@@ -217,8 +218,18 @@ def play(config):
 
             elif c in COMMANDS["evaluate"]:
                 e = COMMANDS["evaluate"].parse(args)
-                r = evaluator.safe_eval_tree(parse.treeify(e, config.ops))
-                print(r)
+                try:
+                    r = evaluator.eval_tree(parse.treeify(e, config.ops))
+                    print(r)
+                
+                except OverflowError as e:
+                    print("overflow error", e)
+
+                except ZeroDivisionError as e:
+                    print("undefined", e)
+
+                except (Exception) as e:
+                    raise GameException(e)
 
             elif c in COMMANDS["show-config"]:
                 print(config)

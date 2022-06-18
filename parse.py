@@ -3,6 +3,8 @@ from itertools import groupby
 from trees import Node
 import re
 
+class ParseException(Exception): pass
+
 dedup = lambda s, cs = (' ',): reduce(
     lambda a, b: a + (b[0] if b[0] in cs else ''.join(b[1])),
     groupby(s),
@@ -23,8 +25,19 @@ def _treeify(s, ops):
         return Node(name=s, value=s)
     
     f, *r = s
-    func = ops[f, len(r)]
-    return Node(*(_treeify(c, ops) for c in r), name=func.name, value=func)
+    try:
+        func = ops[f, len(r)]
+        return Node(*(_treeify(c, ops) for c in r), name=func.name, value=func)
+    
+    except KeyError:
+        raise ParseException(f"no operator found for {len(r)}-ary {f}")
+
+    except SyntaxError as e:
+        raise ParseException(f"syntax error: {e}")
+
+    except Exception as e:
+        raise ParseException(f"an error occurred while parsing: {e}")
+        
 
 
 treeify = lambda s, ops: _treeify(tuplify(s), {(f.name, f.argcount): f for f in ops})
