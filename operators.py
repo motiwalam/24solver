@@ -32,14 +32,17 @@ class Function:
 
         return self.__argcount
 
+# unary
+neg = Function('-', neg)
+fact = Function('!', factorial, max_applications=1)
 
+# binary
 add = Function('+', add)
 sub = Function('-', sub)
 mul = Function('*', mul)
 div = Function('/', itruediv)
 pow = Function('^', lambda a, b: float(a) ** b)
-neg = Function('-', neg)
-root = Function('root', lambda n, r: n ** (1 / r))
-fact = Function('!', factorial, max_applications=1)
+root = Function('√', lambda n, r: n ** (1 / r))
 
-arith_ops = (add, sub, mul, div, pow)
+# the arithmetic operators
+arith_ops = add, sub, mul, div, pow
