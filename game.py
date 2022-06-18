@@ -17,6 +17,10 @@ def parse_function(argv):
         func, maxv = res
         return operators.Function(name, func, max_applications=maxv)
 
+    elif isinstance(res, operators.Function):
+        res.name = name
+        return res
+
     else:
         func = operators.Function(name, res)
         if func.argcount == 1:
