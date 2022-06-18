@@ -185,6 +185,8 @@ def play(config):
             elif c in COMMANDS["set-target"]:
                 config.target = COMMANDS["set-target"].parse(args)
                 s  = set(solv.solve(ns, target=config.target, ops=config.ops))
+                if len(s) == 0:
+                    ns, s = generate(config)
 
             elif c in COMMANDS["set-lower"]:
                 config.lower = COMMANDS["set-lower"].parse(args)
