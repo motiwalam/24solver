@@ -1,35 +1,20 @@
 from trees import nleaves, Node
-from inspect import signature
 from itertools import groupby, product, permutations
 from more_itertools import flatten
 from functools import reduce
 import operators
 
 foldr = lambda func, xs, initial: reduce(lambda x, y: func(y, x), reversed(xs), initial)
-argcount = lambda f: len(signature(f).parameters)
 
 def optable(ops):
-    def key(v):
-        if isinstance(v, tuple):
-            assert len(v) == 2, 'unary operations must be passed as pairs'
-            c = argcount(v[0])
-            assert c == 1, 'operation was not unary'
-            return c
-        else:
-            return argcount(v)
-
-    return {k: tuple(g) for k, g in groupby(ops, key)}
+    return {k: tuple(g) for k, g in groupby(ops, lambda v: v.argcount)}
 
 
-def possible_unary_apps(unarys):
-    if unarys:
-        funcs, maxs = zip(*unarys)
-        for combo in product(*(range(n + 1) for n in maxs)):
-            fs = flatten((f,) * i for f, i in zip(funcs, combo))
+def possible_unary_apps(funcs):
+    for combo in product(*(range(f.max_applications + 1) for f in funcs)):
+        fs = flatten((f,) * i for f, i in zip(funcs, combo))
+        yield from permutations(fs)
 
-            yield from permutations(fs)
-    else:
-        return ()
 
 def possible_ops(t, optable):
     if t.is_leaf():
@@ -38,7 +23,8 @@ def possible_ops(t, optable):
     else:
         for o in optable[len(t.children)]:
             for cs in product(*(possible_ops(c, optable) for c in t.children)):
-                yield Node(*cs, name = o.__name__, value = o)
+                yield Node(*cs, name = o.name, value = o)
+
 
 def with_leaves(t, l):
     if t.is_leaf():
@@ -49,7 +35,7 @@ def with_leaves(t, l):
         return Node(*(with_leaves(c, l) for c in t.children), name = t.name, value = t.value)
 
 def apply_unary(fs, node):
-    return foldr(lambda f, g: Node(g, name = f.__name__, value = f), fs, node)
+    return foldr(lambda f, g: Node(g, name = f.name, value = f), fs, node)
 
 def with_unary(t, unarys):
     for apps in unarys:
