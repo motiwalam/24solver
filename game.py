@@ -121,21 +121,21 @@ COMMANDS = {
     ),
 
     "add-op": Command(
-        ("add-op", "new-op", "op"),
+        ("add-op", "new-op", "op", "o"),
         args=("<NAME: STR>", "<OP: LAMBDA>"),
         help="create a new operator with name STR and function OPERATOR",
         parse=parse_function
     ),
 
     "remove-op": Command(
-        ("remove-op", "rm-op", "rmop"),
+        ("remove-op", "rm-op", "rmop", "r"),
         args=("<NAME: STR>",),
         help="remove the operator NAME from the list of operators",
         parse=lambda argv: argv[0]
     ),
 
     "show-config": Command(
-        ("show-config", "config", "status"), 
+        ("show-config", "config", "status", "c"), 
         help="show the current configuration"
     ),
 
