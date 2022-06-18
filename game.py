@@ -6,7 +6,8 @@ from re import M
 import solv
 import operators
 import argparse
-
+import evaluator
+import parse
 
 def parse_function(argv):
     name, *rest = argv
@@ -139,6 +140,13 @@ COMMANDS = {
         help="show the current configuration"
     ),
 
+    "evaluate": Command(
+        ("evaluate", "eval", "e"),
+        args=("<EXPR>",),
+        help="evaluate the expression and print the result",
+        parse=lambda argv: ' '.join(argv)
+    ),
+
     "quit": Command(("quit", "q"), help="quit"),
 
     "help": Command(("help", "h"), help="print this help message")
@@ -206,6 +214,11 @@ def play(config):
                 n = COMMANDS["remove-op"].parse(args)
                 config.ops = tuple(o for o in config.ops if o.name != n)
                 s  = set(solv.solve(ns, target=config.target, ops=config.ops))
+
+            elif c in COMMANDS["evaluate"]:
+                e = COMMANDS["evaluate"].parse(args)
+                r = evaluator.safe_eval_tree(parse.treeify(e, config.ops))
+                print(r)
 
             elif c in COMMANDS["show-config"]:
                 print(config)

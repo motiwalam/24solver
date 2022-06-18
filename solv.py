@@ -2,6 +2,7 @@ from trees import nleaves, Node
 from itertools import groupby, product, permutations
 from more_itertools import flatten
 from functools import reduce
+from evaluator import safe_eval_tree
 import operators
 
 foldr = lambda func, xs, initial: reduce(lambda x, y: func(y, x), reversed(xs), initial)
@@ -52,19 +53,6 @@ def possible_trees(t, n, optable):
             else:
                 yield v
 
-
-def eval_tree(tree):
-    if tree.is_leaf():
-        return tree.value
-    return tree.value(*(eval_tree(c) for c in tree.children))
-
-
-def safe_eval_tree(tree, default=None):
-    try:
-        return eval_tree(tree)
-
-    except Exception:
-        return default
 
 def gen_exprs(n, ops):
     table = optable(ops)
