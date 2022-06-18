@@ -6,10 +6,8 @@ from evaluator import safe_eval_tree
 import operators
 
 foldr = lambda func, xs, initial: reduce(lambda x, y: func(y, x), reversed(xs), initial)
-
-def optable(ops):
-    return {k: tuple(g) for k, g in groupby(ops, lambda v: v.argcount)}
-
+optable = lambda ops: {k: tuple(g) for k, g in groupby(ops, lambda v: v.argcount)}
+apply_unary = lambda fs, node: foldr(lambda f, g: Node(g, name = f.name, value = f), fs, node)
 
 def possible_unary_apps(funcs):
     for combo in product(*(range(f.max_applications + 1) for f in funcs)):
@@ -35,13 +33,12 @@ def with_leaves(t, l):
     else:
         return Node(*(with_leaves(c, l) for c in t.children), name = t.name, value = t.value)
 
-def apply_unary(fs, node):
-    return foldr(lambda f, g: Node(g, name = f.name, value = f), fs, node)
 
 def with_unary(t, unarys):
     for apps in unarys:
         for cs in product(*(with_unary(c, unarys) for c in t.children)):
             yield apply_unary(apps, Node(*cs, name = t.name, value = t.value))
+        
         
 def possible_trees(t, n, optable):
     unarys = set(possible_unary_apps(optable.get(1, [])))
