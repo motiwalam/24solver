@@ -1,5 +1,5 @@
 def eval_tree(tree):
-    if tree.is_leaf():
+    if tree.is_leaf:
         return tree.value
     return tree.value(*(eval_tree(c) for c in tree.children))
 
