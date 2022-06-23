@@ -34,7 +34,7 @@ class Operator:
 ```
 `operators.arith_ops` is a tuple of the operators `add`, `sub`, `mul`, `div`, and `pow`.
 
-`Node` is a class defined in the module `trees.py`. Calling `str` on it will produce a string representing it in s-expression syntax.
+`Node` is a class defined in the module `trees.py`. Calling `str` on an instance of `Node` will produce a representation of the tree it contains.
 
 ### example usage
 #### default parameters
@@ -60,7 +60,7 @@ solns = tuple(solve.solve((1, 2, 3, 4), target=36))
 print(len(solns))
 # 85
 print(solns[0])
-# (* (+ (^ 2 3) 1) 4)
+# (((2 ^ 3) + 1) * 4)
 ```
 #### using operators with more than two operands
 ```python
@@ -70,7 +70,7 @@ avg = operators.Operator('avg', lambda a, b, c: (a + b + c) / 3)
 solns = solve.solve((6, 4, 3, 2), ops=operators.arith_ops + (avg,))
 print(*set(solns), sep='\n')
 # ...
-# (avg 6 (^ 4 3) 2)
+# (avg 6 (4 ^ 3) 2)
 # ...
 ```
 ### A note on unary operators
