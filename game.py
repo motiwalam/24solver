@@ -15,14 +15,14 @@ def parse_function(argv):
 
     if isinstance(res, tuple):
         func, maxv = res
-        return operators.Function(name, func, max_applications=maxv)
+        return operators.Operator(name, func, max_applications=maxv)
 
-    elif isinstance(res, operators.Function):
+    elif isinstance(res, operators.Operator):
         res.name = name
         return res
 
     else:
-        func = operators.Function(name, res)
+        func = operators.Operator(name, res)
         if func.argcount == 1:
             raise GameException("unary function needs to be accompanied with maximum number of applications")
         return func

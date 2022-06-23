@@ -12,7 +12,7 @@ def names(n):
         yield chars[idx] + subscript
 
 
-class Function:
+class Operator:
     def __init__(self, name, f, max_applications=None):
         self.name = name
         self.f = f
@@ -33,16 +33,16 @@ class Function:
         return self.__argcount
 
 # unary
-neg = Function('-', neg)
-fact = Function('!', factorial, max_applications=1)
+neg = Operator('-', neg)
+fact = Operator('!', factorial, max_applications=1)
 
 # binary
-add = Function('+', add)
-sub = Function('-', sub)
-mul = Function('*', mul)
-div = Function('/', itruediv)
-pow = Function('^', lambda a, b: float(a) ** b)
-root = Function('√', lambda n, r: n ** (1 / r))
+add = Operator('+', add)
+sub = Operator('-', sub)
+mul = Operator('*', mul)
+div = Operator('/', itruediv)
+pow = Operator('^', lambda a, b: float(a) ** b)
+root = Operator('√', lambda n, r: n ** (1 / r))
 
 # the arithmetic operators
 arith_ops = add, sub, mul, div, pow

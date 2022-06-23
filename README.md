@@ -19,11 +19,11 @@ Execute `game.py` and type `help` to see all of the available commands.
 The solver is exposed under a single function `solve` in the `solv.py` module.
 `solve` has the signature:
 ```python
-def solve(ns: tuple[number], target: number = 24, ops: tuple[Function] = operators.arith_ops) -> Generator[Node]
+def solve(ns: tuple[number], target: number = 24, ops: tuple[Operator] = operators.arith_ops) -> Generator[Node]
 ```
-`Function` is a class defined in the `operators.py` module. It has the signature:
+`Operator` is a class defined in the `operators.py` module. It has the signature:
 ```python
-class Function:
+class Operator:
   def __init__(self, name: str, f: Callable, max_applications: int = None)
 ```
 `operators.arith_ops` is a tuple of the operators `add`, `sub`, `mul`, `div`, and `pow`.
@@ -42,7 +42,7 @@ print(len(set(solns)))
 ```python
 import solv
 import operators
-root = operators.Function('root', lambda n, r: n ** (1/r))
+root = operators.Operator('root', lambda n, r: n ** (1/r))
 solns = solv.solve((1, 2, 3, 4), ops=operators.arith_ops + (root,))
 print(len(set(solns)))
 # 367
@@ -60,7 +60,7 @@ print(solns[0])
 ```python
 import solv
 import operators
-avg = operators.Function('avg', lambda a, b, c: (a + b + c) / 3)
+avg = operators.Operator('avg', lambda a, b, c: (a + b + c) / 3)
 solns = solv.solve((6, 4, 3, 2), ops=operators.arith_ops + (avg,))
 print(*set(solns), sep='\n')
 # ...
@@ -68,7 +68,7 @@ print(*set(solns), sep='\n')
 # ...
 ```
 ### A note on unary operators
-In the signature for the `Function` object, you saw a parameter called `max_applications`. This note discusses this parameter and why it is needed.
+In the signature for the `Operator` object, you saw a parameter called `max_applications`. This note discusses this parameter and why it is needed.
 
 This solver works by generating all possible expressions for a given set of numbers and operators, and then filters them for ones that evaluate to the correct value.
 
