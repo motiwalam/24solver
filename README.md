@@ -15,7 +15,7 @@ The file `game.py` can be executed to provide a front end to the solver.
 Here, you can configure the parameters, add and remove operators, and just play the game.
 Execute `game.py` and type `help` to see all of the available commands.
 
-### using the solver programmaticaly
+### using the solver programmatically
 The solver is exposed under a single function `solve` in the `solv.py` module.
 `solve` has the signature:
 ```python
