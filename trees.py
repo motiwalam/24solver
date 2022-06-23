@@ -35,7 +35,7 @@ class Node:
 
     @cached_property
     def numleaves(self):
-        return count_leaves(self)
+        return self.is_leaf + sum(c.numleaves for c in self.children)
 
 # generate all trees with n leaves where the number of children 
 # of non leaf node comes from the set a
@@ -55,5 +55,4 @@ def _nleaves(n, k, a):
                 else:      yield Node(*l.children, r, name='f')
 
 
-count_leaves = lambda t: (len(t.children) == 0) + sum(map(count_leaves, t.children))
 snleaves = lambda *args, **kwargs: set(nleaves(*args, **kwargs))
