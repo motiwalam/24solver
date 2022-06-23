@@ -29,7 +29,7 @@ def possible_ops(t, optable):
 def with_leaves(t, l):
     if t.is_leaf:
         v = l.pop()
-        return Node(name = v, value = v)
+        return Node(name=v, value=v)
 
     else:
         return Node(*(with_leaves(c, l) for c in t.children), name=t.name, value=t.value)
