@@ -39,24 +39,24 @@ class Operator:
 ### example usage
 #### default parameters
 ```python
-import solv
-solns = solv.solve((1, 2, 3, 4))
+import solve
+solns = solve.solve((1, 2, 3, 4))
 print(len(set(solns)))
 # 307
 ```
 #### adding a custom operator
 ```python
-import solv
+import solve
 import operators
 root = operators.Operator('root', lambda n, r: n ** (1/r))
-solns = solv.solve((1, 2, 3, 4), ops=operators.arith_ops + (root,))
+solns = solve.solve((1, 2, 3, 4), ops=operators.arith_ops + (root,))
 print(len(set(solns)))
 # 367
 ```
 #### using a different target
 ```python
-import solv
-solns = tuple(solv.solve((1, 2, 3, 4), target=36))
+import solve
+solns = tuple(solve.solve((1, 2, 3, 4), target=36))
 print(len(solns))
 # 85
 print(solns[0])
@@ -64,10 +64,10 @@ print(solns[0])
 ```
 #### using operators with more than two operands
 ```python
-import solv
+import solve
 import operators
 avg = operators.Operator('avg', lambda a, b, c: (a + b + c) / 3)
-solns = solv.solve((6, 4, 3, 2), ops=operators.arith_ops + (avg,))
+solns = solve.solve((6, 4, 3, 2), ops=operators.arith_ops + (avg,))
 print(*set(solns), sep='\n')
 # ...
 # (avg 6 (^ 4 3) 2)

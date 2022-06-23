@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-
-from lib2to3.pgen2.token import COMMA
 import random
 from re import M
-import solv
+import solve
 import operators
 import argparse
 import evaluator
@@ -165,7 +163,7 @@ nrandom = lambda n, l, u: tuple(random.randint(l, u) for _ in range(n))
 
 def generate(config):
     while not len(
-        s := set(solv.solve(
+        s := set(solve.solve(
             ns := nrandom(config.n, config.lower, config.upper),
             target=config.target,
             ops=config.ops
@@ -185,7 +183,7 @@ def play(config):
 
             elif c in COMMANDS["set-ns"]:
                 ns = COMMANDS["set-ns"].parse(args)
-                s  = set(solv.solve(ns, target=config.target, ops=config.ops))
+                s  = set(solve.solve(ns, target=config.target, ops=config.ops))
 
             elif c in COMMANDS["solve"]:
                 print(*s, sep='\n')
@@ -197,7 +195,7 @@ def play(config):
 
             elif c in COMMANDS["set-target"]:
                 config.target = COMMANDS["set-target"].parse(args)
-                s  = set(solv.solve(ns, target=config.target, ops=config.ops))
+                s  = set(solve.solve(ns, target=config.target, ops=config.ops))
                 if len(s) == 0:
                     ns, s = generate(config)
 
@@ -213,12 +211,12 @@ def play(config):
 
             elif c in COMMANDS["add-op"]:
                 config.ops += COMMANDS["add-op"].parse(args),
-                s  = set(solv.solve(ns, target=config.target, ops=config.ops))
+                s  = set(solve.solve(ns, target=config.target, ops=config.ops))
 
             elif c in COMMANDS["remove-op"]:
                 n = COMMANDS["remove-op"].parse(args)
                 config.ops = tuple(o for o in config.ops if o.name != n)
-                s  = set(solv.solve(ns, target=config.target, ops=config.ops))
+                s  = set(solve.solve(ns, target=config.target, ops=config.ops))
 
             elif c in COMMANDS["evaluate"]:
                 e = COMMANDS["evaluate"].parse(args)
