@@ -1,17 +1,22 @@
 from itertools import product
+from functools import cached_property
+
 class Node:
     def __init__(self, *children, name='x', value=None):
         self.children = children
         self.name = name
         self.value = value
-        self.__numleaves = None
 
     def __repr__(self):
-        return f'Node<{self.name}, {len(self.children)}, {self.numleaves}>'
+        return f'Node<{self.name}, {self.arity}, {self.numleaves}>'
 
     def __str__(self):
         if self.is_leaf:
             return f'{self.name}'
+
+        if self.arity == 2:
+            return f'({self.children[0]} {self.name} {self.children[1]})'
+
         return f'({self.name} {" ".join(str(c) for c in self.children)})'
 
     def __hash__(self):
@@ -21,14 +26,16 @@ class Node:
         return str(self) == str(other)
 
     @property
-    def is_leaf(self):
-        return len(self.children) == 0
+    def arity(self):
+        return len(self.children)
 
     @property
+    def is_leaf(self):
+        return self.arity == 0
+
+    @cached_property
     def numleaves(self):
-        if self.__numleaves is None:
-            self.__numleaves = count_leaves(self)
-        return self.__numleaves
+        return count_leaves(self)
 
 # generate all trees with n leaves where the number of children 
 # of non leaf node comes from the set a
