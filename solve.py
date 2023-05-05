@@ -4,6 +4,7 @@ from more_itertools import flatten
 from functools import reduce, partial
 from evaluator import safe_eval_tree
 import operators
+import sys
 
 foldr = lambda func, xs, initial: reduce(lambda x, y: func(y, x), reversed(xs), initial)
 optable = lambda ops: {k: tuple(g) for k, g in groupby(ops, lambda v: v.argcount)}
@@ -58,5 +59,16 @@ def gen_exprs(n, ops):
 
 
 solve = lambda ns, target=24, ops=operators.arith_ops: (t for t in gen_exprs(ns, ops) if safe_eval_tree(t) == target)
-# def solve(ns, target=24, ops=operators.arith_ops):
-#     yield from (t for t in gen_exprs(ns, ops) if safe_eval_tree(t) == target)
+
+if __name__ == "__main__":
+    target, ops_str, *ns = sys.argv[1:]
+    target, ns = int(target), list(map(int, ns))
+
+    ops = [o for o in operators.arith_ops if o.name in ops_str]
+    
+    try:
+        for soln in solve(ns, target, ops):
+            print(soln)
+    except KeyboardInterrupt as e:
+        print()
+        raise SystemExit(0)
